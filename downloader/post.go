@@ -1,27 +1,28 @@
-package main
+package downloader
 
 import (
 	"bufio"
 	"bytes"
 	"encoding/json"
-	"errors"
+	// "errors"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/pkg/errors"
 )
 
 var GetCsrfTokenUrl = "https://xskydata.jobs.feishu.cn/api/v1/csrf/token"
 var GetCsrfTokenErrUrl = "https://xskydata.jobs.feishu.cn/api/v1/csrf"
 var GetPostUrl = "https://xskydata.jobs.feishu.cn/api/v1/search/job/posts"
 
-func main() {
-	log.Println("start get posts...")
+func GetPostsAndWriteFile(name string) error {
 	respData, err := getCsrfToken(GetCsrfTokenUrl, map[string]int{"portal_entrance": 1})
 	if err != nil {
-		log.Println("get token failed!")
-		return
+		// log.Println("get token failed!")
+		return errors.Wrap(err, "get token failed!")
 	}
 	postReq := GetPostDataRequest{
 		Limit:             1,
@@ -32,19 +33,20 @@ func main() {
 	}
 	resp, err := post(GetPostUrl, respData.Data.Token, postReq)
 	if err != nil {
-		log.Printf("get post data failed, err= %v", err)
+		// log.Printf("get post data failed, err= %v", err)
+		return errors.Wrap(err, "get token failed!")
 	}
-	file, err := os.OpenFile("./data/post.json", os.O_CREATE|os.O_APPEND|os.O_RDWR, 0666)
+	file, err := os.OpenFile(name, os.O_CREATE|os.O_APPEND|os.O_RDWR, 0666)
 	defer file.Close()
 	if err != nil {
-		log.Println("create file failed")
-		return
+		// log.Println("create file failed")
+		return errors.Wrap(err, "create file failed")
 	}
 	var postData GetPostDataResp
 	err = json.Unmarshal([]byte(resp), &postData)
 	if err != nil {
-		log.Println("resp marshal failed")
-		return
+		// log.Println("resp marshal failed")
+		return errors.Wrap(err, "resp marshal failed")
 	}
 	writer := bufio.NewWriter(file)
 	for i := 0; i < postData.Data.Count/10+1; i++ {
@@ -62,6 +64,7 @@ func main() {
 		writer.WriteString(respList)
 	}
 	writer.Flush()
+	return nil
 }
 
 func getCsrfToken(url string, param map[string]int) (*GetTokenRespData, error) {

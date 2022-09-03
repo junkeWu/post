@@ -8,8 +8,8 @@ POST https://xskydata.jobs.feishu.cn/api/v1/search/job/posts
 Content-Type: application/json
 accept-encoding: deflate
 user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36
-cookie: atsx-csrf-token=QOfrDp740mFqmkHsNVbdq4lWGLuSh8TcaP93qqT16f4=
-x-csrf-token: QOfrDp740mFqmkHsNVbdq4lWGLuSh8TcaP93qqT16f4=
+cookie: atsx-csrf-token=0JBDJOSUTGQXi9RNxLbXR87YjvEXkdADZTcVCmfY8YA=
+x-csrf-token: 0JBDJOSUTGQXi9RNxLbXR87YjvEXkdADZTcVCmfY8YA=
 
 {
   "keyword": "",

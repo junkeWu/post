@@ -96,7 +96,16 @@ func getCsrfToken(url string, param map[string]int) (*GetTokenRespData, error) {
 	return &respData, nil
 }
 
-func post(url, token string, body GetPostDataRequest) (string, error) {
+func MockGetPost(fn func(url, token string, body GetPostDataRequest) (string, error)) (string, error) {
+	post = fn
+	var req GetPostDataRequest
+	resp, _ := post(GetPostUrl, "token", req)
+	return resp, nil
+}
+
+var post = getPost
+
+func getPost(url, token string, body GetPostDataRequest) (string, error) {
 	payload, err := json.Marshal(body)
 	if err != nil {
 		return "", err

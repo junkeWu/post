@@ -49,7 +49,11 @@ func GetPostsAndWriteFile(name string) error {
 		return errors.Wrap(err, "resp marshal failed")
 	}
 	writer := bufio.NewWriter(file)
-	for i := 0; i < postData.Data.Count/10+1; i++ {
+	var count = 0
+	if postData.Data.Count%10 != 0 {
+		count = 1
+	}
+	for i := 0; i < postData.Data.Count/10+count; i++ {
 		respList, err := post(GetPostUrl, respData.Data.Token, GetPostDataRequest{
 			Limit:             10,
 			Offset:            i * 10,

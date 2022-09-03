@@ -1,0 +1,27 @@
+POST https://xskydata.jobs.feishu.cn/api/v1/csrf/token
+Content-Type: application/json
+
+{"portal_entrance":1}
+
+###
+POST https://xskydata.jobs.feishu.cn/api/v1/search/job/posts
+Content-Type: application/json
+accept-encoding: deflate
+user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36
+cookie: atsx-csrf-token=QOfrDp740mFqmkHsNVbdq4lWGLuSh8TcaP93qqT16f4=
+x-csrf-token: QOfrDp740mFqmkHsNVbdq4lWGLuSh8TcaP93qqT16f4=
+
+{
+  "keyword": "",
+  "limit": 1,
+  "offset": 0,
+  "job_category_id_list": [],
+  "location_code_list": [],
+  "subject_id_list": [],
+  "recruitment_id_list": [],
+  "portal_type": 6,
+  "job_function_id_list": [],
+  "portal_entrance": 1
+}
+
+###

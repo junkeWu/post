@@ -32,8 +32,8 @@ func GetPostsAndWriteFile(name string) error {
 	}
 	resp, err := post(GetPostUrl, respData.Data.Token, postReq)
 	if err != nil {
-		// log.Printf("get post data failed, err= %v", err)
-		return errors.Wrap(err, "get token failed!")
+		// log.Printf("get post count failed, err= %v", err)
+		return errors.Wrap(err, "get count failed")
 	}
 	file, err := os.OpenFile(name, os.O_CREATE|os.O_APPEND|os.O_RDWR, 0666)
 	defer file.Close()
@@ -114,9 +114,9 @@ func getPost(url, token string, body GetPostDataRequest) (string, error) {
 	if err != nil {
 		return "", err
 	}
-
+	encodingType := "deflate" // default deflate 无需解压
 	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("accept-encoding", "deflate")
+	req.Header.Add("accept-encoding", encodingType)
 	req.Header.Add("user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36\",\"application/json")
 	cookie := fmt.Sprintf("atsx-csrf-token=%s", token)
 	req.Header.Add("cookie", cookie)
@@ -129,6 +129,11 @@ func getPost(url, token string, body GetPostDataRequest) (string, error) {
 	data, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return "", err
+	}
+	// todo 解压
+	if encodingType == "br" {
+		// todo
+		return string(data), nil
 	}
 	var postResp GetPostDataResp
 	err = json.Unmarshal(data, &postResp)
